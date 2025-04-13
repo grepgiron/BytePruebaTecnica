@@ -1,77 +1,96 @@
 package com.bytesw.rest_app.models;
 
-import jakarta.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.math.BigDecimal;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "cuentas")
-public class Cuenta {
-
+public class Cuenta 
+{
     @Id
+    @Column(name = "nro_cta", length = 12)
     private String numeroCuenta;
 
-    @ManyToOne
-    @JoinColumn(name = "cliente_id")
-    private Cliente cliente;
+    @Column(name = "id_cliente")
+    private Long clienteId;
 
+    @Column(name = "fecha_apertura")
     private LocalDate fechaApertura;
-    
+
+    @Column(name = "hora_apertura")
     private LocalTime horaApertura;
 
+    @Column(length = 20)
     private String estado;
 
+    @Column(precision = 15, scale = 2)
     private BigDecimal saldo;
 
-    public String getNumeroCuenta() {
+    // Getters y Setters
+    public String getNumeroCuenta() 
+    {
         return numeroCuenta;
     }
 
-    public Cliente getCliente() {
-        return cliente;
-    }
-
-    public LocalDate getFechaApertura() {
-        return fechaApertura;
-    }
-
-    public LocalTime getHoraApertura() {
-        return horaApertura;
-    }
-
-    public String getEstado() {
-        return estado;
-    }
-
-    public BigDecimal getSaldo() {
-        return saldo;
-    }
-
-    public void setNumeroCuenta(String numeroCuenta) {
+    public void setNumeroCuenta(String numeroCuenta) 
+    {
         this.numeroCuenta = numeroCuenta;
     }
 
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
+    public Long getClienteId() 
+    {
+        return clienteId;
     }
 
-    public void setFechaApertura(LocalDate fechaApertura) {
+    public void setClienteId(Long clienteId) 
+    {
+        this.clienteId = clienteId;
+    }
+
+    public LocalDate getFechaApertura() 
+    {
+        return fechaApertura;
+    }
+
+    public void setFechaApertura(LocalDate fechaApertura) 
+    {
         this.fechaApertura = fechaApertura;
     }
 
-    public void setHoraApertura(LocalTime horaApertura) {
+    public LocalTime getHoraApertura() 
+    {
+        return horaApertura;
+    }
+
+    public void setHoraApertura(LocalTime horaApertura) 
+    {
         this.horaApertura = horaApertura;
     }
 
-    public void setEstado(String estado) {
+    public String getEstado() 
+    {
+        return estado;
+    }
+
+    public void setEstado(String estado) 
+    {
         this.estado = estado;
     }
 
-    public void setSaldo(BigDecimal saldo) {
-        this.saldo = saldo;
+    public BigDecimal getSaldo() 
+    {
+        return saldo;
     }
 
-    
-
+    public void setSaldo(BigDecimal saldo) 
+    {
+        this.saldo = saldo;
+    }
 }
+

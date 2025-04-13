@@ -35,11 +35,11 @@ public class ClienteController {
             String tipoIdentificacion = request.get("tipoIdentificacion");
             String fechaNacimiento = request.get("fechaNacimiento");
     
-            String responseXml = soapClient.enviarCrearCliente(nombre, identificacion, tipoIdentificacion, fechaNacimiento);
+            Map<String, String> responseXml = soapClient.enviarCrearCliente(nombre, identificacion, tipoIdentificacion, fechaNacimiento);
     
-            Map<String, String> response = new HashMap<>();
-            response.put("soapResponse", responseXml);
-            return response;
+            //Map<String, String> response = new HashMap<>();
+            //response.put("soapResponse", responseXml);
+            return responseXml;
 
         }catch (Exception e){
             System.out.println(e.getMessage());

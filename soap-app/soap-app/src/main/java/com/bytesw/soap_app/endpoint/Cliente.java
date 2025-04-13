@@ -39,7 +39,7 @@ public class Cliente {
         this.clienteParser = clienteParser;
     }
 
-    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "procesarClienteRequest")
+    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "crearClienteRequest")
     @ResponsePayload
     public CrearClienteResponse crearCliente(@RequestPayload CrearClienteRequest request) 
     {

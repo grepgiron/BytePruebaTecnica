@@ -5,7 +5,7 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name = "procesarClienteResponse", namespace = "http://bytesw.com/soap/clientes")
+@XmlRootElement(name = "crearClienteResponse", namespace = "http://bytesw.com/soap/clientes")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class CrearClienteResponse 
 {

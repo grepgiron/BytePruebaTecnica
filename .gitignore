@@ -1,0 +1,54 @@
+# Ignorar archivos de configuración y dependencias comunes
+# Node.js dependencies (si aplican en alguno de los proyectos)
+node_modules/
+
+# Eclipse
+.project
+.classpath
+.settings/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# VS Code
+.vscode/
+
+# Maven y Gradle
+target/
+build/
+
+# Archivos generados por el entorno de Spring Boot
+spring-boot-devtools/
+
+# Logs
+*.log
+
+# Archivos compilados
+*.class
+
+# Archivos de salida de pruebas
+/test-outputs/
+
+# Archivos temporales y de sistema operativo
+.DS_Store
+Thumbs.db
+
+# Ignorar las dependencias de Java y archivos generados
+*.jar
+*.war
+
+# Ignorar archivos específicos dentro de SOAP-APP
+SOAP-APP/target/
+SOAP-APP/*.log
+SOAP-APP/idea/
+SOAP-APP/.vscode/
+
+# Ignorar archivos específicos dentro de REST-APP
+REST-APP/target/
+REST-APP/*.log
+REST-APP/idea/
+REST-APP/.vscode/
+
+# Ignorar archivos temporales de IDE
+*.swp

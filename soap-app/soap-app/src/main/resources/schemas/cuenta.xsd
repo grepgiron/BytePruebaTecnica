@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://bytesw.com/soap/cuentas"
+           xmlns:tns="http://bytesw.com/soap/cuentas"
+           elementFormDefault="qualified">
+
+    <xs:element name="crearCuentaRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="numeroCuenta" type="xs:string"/>
+                <xs:element name="clienteId" type="xs:long"/>
+                <xs:element name="fechaApertura" type="xs:date"/>
+                <xs:element name="horaApertura" type="xs:time"/>
+                <xs:element name="estado" type="xs:string"/>
+                <xs:element name="saldo" type="xs:decimal"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="crearCuentaResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="codigo" type="xs:string"/>
+                <xs:element name="mensaje" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

@@ -29,6 +29,17 @@ public class Cuenta
     @Column(length = 20)
     private String estado;
 
+    @Column(name = "numero_cuenta", length = 20)
+    private String cta;
+
+    public void setCta(String cta) {
+        this.cta = cta;
+    }
+
+    public String getCta() {
+        return cta;
+    }
+
     @Column(precision = 15, scale = 2)
     private BigDecimal saldo;
 

@@ -80,7 +80,7 @@ public class Cliente {
     @ResponsePayload
     public EliminarClienteResponse eliminarCliente(@RequestPayload EliminarClienteRequest request) {
        
-        String resultado = clienteService.eliminarCliente(request.getTrama());
+        String resultado = clienteService.eliminarCliente(request.getTrama().trim());
 
         EliminarClienteResponse response = new EliminarClienteResponse();
         response.setTrama(resultado);

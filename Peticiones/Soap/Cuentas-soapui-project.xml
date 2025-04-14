@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project id="4926a015-f91d-4d94-8599-b71bf991eca9" activeEnvironment="Default" name="Cuentas" resourceRoot="" soapui-version="5.8.0" abortOnError="false" runType="SEQUENTIAL" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" id="d3917d97-3ba6-4e43-9e17-756b02dc32fb" wsaVersion="NONE" name="CuentaPortSoap11" type="wsdl" bindingName="{http://bytesw.com/soap/cuentas}CuentaPortSoap11" soapVersion="1_1" anonymous="optional" definition="http://localhost:8081/ws/cuentas.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="http://localhost:8081/ws/cuentas.wsdl"><con:part><con:url>http://localhost:8081/ws/cuentas.wsdl</con:url><con:content><![CDATA[<wsdl:definitions targetNamespace="http://bytesw.com/soap/cuentas" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:sch="http://bytesw.com/soap/cuentas" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://bytesw.com/soap/cuentas">
+  <wsdl:types>
+    <xs:schema elementFormDefault="qualified" targetNamespace="http://bytesw.com/soap/cuentas" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="crearCuentaRequest">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="numeroCuenta" type="xs:string"/>
+            <xs:element name="clienteId" type="xs:long"/>
+            <xs:element name="fechaApertura" type="xs:date"/>
+            <xs:element name="horaApertura" type="xs:time"/>
+            <xs:element name="estado" type="xs:string"/>
+            <xs:element name="saldo" type="xs:decimal"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="crearCuentaResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="codigo" type="xs:string"/>
+            <xs:element name="mensaje" type="xs:string"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="crearCuentaRequest">
+    <wsdl:part element="tns:crearCuentaRequest" name="crearCuentaRequest"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="crearCuentaResponse">
+    <wsdl:part element="tns:crearCuentaResponse" name="crearCuentaResponse"></wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="CuentaPort">
+    <wsdl:operation name="crearCuenta">
+      <wsdl:input message="tns:crearCuentaRequest" name="crearCuentaRequest"></wsdl:input>
+      <wsdl:output message="tns:crearCuentaResponse" name="crearCuentaResponse"></wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="CuentaPortSoap11" type="tns:CuentaPort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="crearCuenta">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="crearCuentaRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="crearCuentaResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="CuentaPortService">
+    <wsdl:port binding="tns:CuentaPortSoap11" name="CuentaPortSoap11">
+      <soap:address location="http://localhost:8081/ws"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:8081/ws</con:endpoint></con:endpoints><con:operation id="8fc3c6bf-4c0c-4796-bcb3-203544b120fa" isOneWay="false" action="" name="crearCuenta" bindingOperationName="crearCuenta" type="Request-Response" outputName="crearCuentaResponse" inputName="crearCuentaRequest" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="59011b31-f2c8-4990-88e8-1e863b2425ff" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8081/ws</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cuen="http://bytesw.com/soap/cuentas">\r
+   <soapenv:Header/>\r
+   <soapenv:Body>\r
+      <cuen:procesarCuentaRequest>\r
+         <trama>00012345678912345678000000001212/12/202312:00:00ACTIVO    0000000001000.00</trama>\r
+      </cuen:procesarCuentaRequest>\r
+   </soapenv:Body>\r
+</soapenv:Envelope>
+]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://bytesw.com/soap/cuentas/CuentaPort/crearCuentaRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/></con:soapui-project>

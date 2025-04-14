@@ -10,6 +10,7 @@ import com.bytesw.rest_app.service.ClientSoap;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 
 import java.util.HashMap;
 import java.util.List;
@@ -47,6 +48,51 @@ public class ClienteController {
         }
     }
 
+    @PutMapping
+    public Map<String, String> actualizarCliente(@RequestBody Map<String, String> request) {
+        System.out.println("request: " + request);
+        try
+        {
+            String nombre = request.get("nombre");
+            String identificacion = request.get("identificacion");
+            String tipoIdentificacion = request.get("tipoIdentificacion");
+            String fechaNacimiento = request.get("fechaNacimiento");
+    
+            Map<String, String> responseXml = soapClient.enviarActualizarCliente(nombre, identificacion, tipoIdentificacion, fechaNacimiento);
+    
+            //Map<String, String> response = new HashMap<>();
+            //response.put("soapResponse", responseXml);
+            return responseXml;
+
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    @DeleteMapping
+    public Map<String, String> eliminarCliente(@RequestBody Map<String, String> request) {
+        System.out.println("request: " + request);
+        try
+        {
+            String identificacion = request.get("identificacion");
+    
+            Map<String, String> responseXml = soapClient.enviarEliminarCliente(identificacion);
+    
+            return responseXml;
+
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Cliente> getClientePorId(@PathVariable Long id) {
+        return clienteRepository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 
     @GetMapping
     public List<Cliente> getClientes(@RequestParam(required = false) Integer page,

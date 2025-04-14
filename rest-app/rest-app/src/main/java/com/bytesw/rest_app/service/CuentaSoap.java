@@ -1,16 +1,10 @@
 package com.bytesw.rest_app.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-import org.springframework.ws.client.core.WebServiceTemplate;
-import org.springframework.xml.transform.StringSource;
-
-import com.bytesw.rest_app.utils.ParserResponse;
-
 import java.io.ByteArrayOutputStream;
+import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,37 +14,50 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
+import org.springframework.ws.client.core.WebServiceTemplate;
+import org.springframework.xml.transform.StringSource;
+
+import com.bytesw.rest_app.utils.ParserResponse;
+
 @Component
-public class ClientSoap {
+public class CuentaSoap {
+    @Value("${trama.cuenta.nroCuenta.length}")
+    private int nroCtaLentgh;
 
-    @Value("${trama.cliente.nombre.length}")
-    private int nombreLength;
+    @Value("${trama.cuenta.clienteId.length}")
+    private int clienteIdLentgh;
 
-    @Value("${trama.cliente.identificacion.length}")
-    private int identificacionLength;
+    @Value("${trama.cuenta.fechaApertura.length}")
+    private int fechaAperturaLentgh;
 
-    @Value("${trama.cliente.tipoIdentificacion.length}")
-    private int tipoIdentificacionLength;
+    @Value("${trama.cuenta.horaApertura.length}")
+    private int horaAperturaLentgh;
 
-    @Value("${trama.cliente.fechaNacimiento.length}")
-    private int fechaNacimientoLength;
+    @Value("${trama.cuenta.estado.length}")
+    private int estadoLentgh;
+
+    @Value("${trama.cuenta.saldo.length}")
+    private int saldoLentgh;
 
 
     private static final String SOAP_URI = "http://localhost:8081/ws";
 
-    @Autowired
-    private WebServiceTemplate webServiceTemplate;
-
-    public Map<String, String> enviarCrearCliente(String nombre, String identificacion, String tipoIdentificacion, String fechaNacimiento) {
-        String trama = buildTrama(nombre, identificacion, tipoIdentificacion, fechaNacimiento);
+    private final WebServiceTemplate webServiceTemplate = new WebServiceTemplate();
+    
+    public Map<String, String> enviarCrearCuenta(String clienteId, String fechaApertura, String horaApertura, String estado, String saldo) {
+        String trama = buildTrama(clienteId, fechaApertura, horaApertura, estado, saldo);
         String xml =
             // "<soapenv:Envelope xmlns:soapenv='http://schemas.xmlsoap.org/soap/envelope/' " +
             // "xmlns:cli='http://bytesw.com/soap/clientes'>" +
             // "<soapenv:Header/>" +
             // "<soapenv:Body>" +
-            "<cli:crearClienteRequest xmlns:cli='http://bytesw.com/soap/clientes'>" +
+            "<cli:crearCuentaRequest xmlns:cli='http://bytesw.com/soap/cuentas'>" +
             "<trama>" + trama + "</trama>" +
-            "</cli:crearClienteRequest>" ;
+            "</cli:crearCuentaRequest>" ;
             // "</soapenv:Body>" +
             // "</soapenv:Envelope>";
 
@@ -81,16 +88,16 @@ public class ClientSoap {
             }
     }
 
-    public Map<String, String> enviarActualizarCliente(String nombre, String identificacion, String tipoIdentificacion, String fechaNacimiento) {
-        String trama = buildTrama(nombre, identificacion, tipoIdentificacion, fechaNacimiento);
+    public Map<String, String> enviarActualizarCuenta(String clienteId, String fechaApertura, String horaApertura, String estado, String saldo) {
+        String trama = buildTrama(clienteId, fechaApertura, horaApertura, estado, saldo);
         String xml =
             // "<soapenv:Envelope xmlns:soapenv='http://schemas.xmlsoap.org/soap/envelope/' " +
             // "xmlns:cli='http://bytesw.com/soap/clientes'>" +
             // "<soapenv:Header/>" +
             // "<soapenv:Body>" +
-            "<cli:actualizarClienteRequest xmlns:cli='http://bytesw.com/soap/clientes'>" +
+            "<cli:actualizarCuentaRequest xmlns:cli='http://bytesw.com/soap/cuentas'>" +
             "<trama>" + trama + "</trama>" +
-            "</cli:actualizarClienteRequest>" ;
+            "</cli:actualizarCuentaRequest>" ;
             // "</soapenv:Body>" +
             // "</soapenv:Envelope>";
 
@@ -121,17 +128,17 @@ public class ClientSoap {
             }
     }
 
-    public Map<String, String> enviarEliminarCliente(String identificacion) {
-        String trama = buildTramaEliminar(identificacion.trim());
+    public Map<String, String> enviarEliminarCuenta(String nroCta) {
+        String trama = buildTramaEliminar(nroCta.trim());
         System.out.println(trama);
         String xml =
             // "<soapenv:Envelope xmlns:soapenv='http://schemas.xmlsoap.org/soap/envelope/' " +
             // "xmlns:cli='http://bytesw.com/soap/clientes'>" +
             // "<soapenv:Header/>" +
             // "<soapenv:Body>" +
-            "<cli:eliminarClienteRequest xmlns:cli='http://bytesw.com/soap/clientes'>" +
+            "<cli:eliminarCuentaRequest xmlns:cli='http://bytesw.com/soap/clientes'>" +
             "<trama>" + trama + "</trama>" +
-            "</cli:eliminarClienteRequest>" ;
+            "</cli:eliminarCuentaRequest>" ;
             // "</soapenv:Body>" +
             // "</soapenv:Envelope>";
 
@@ -162,19 +169,20 @@ public class ClientSoap {
             }
     }
 
-    private String buildTrama(String nombre, String identificacion, String tipoIdentificacion, String fechaNacimiento) {
-        String fechaFormateada = LocalDate.parse(fechaNacimiento).format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+    private String buildTrama(String clienteId, String fechaApertura, String horaApertura, String estado, String saldo) {
+        String fechaFormateada = LocalDate.parse(fechaApertura).format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
         StringBuilder sb = new StringBuilder();
-        sb.append(fixed(nombre, nombreLength));
-        sb.append(fixed(identificacion, identificacionLength));
-        sb.append(fixed(tipoIdentificacion, tipoIdentificacionLength));
-        sb.append(fixed(fechaFormateada, fechaNacimientoLength));
+        sb.append(fixed(clienteId, clienteIdLentgh));
+        sb.append(fixed(fechaFormateada, fechaAperturaLentgh));
+        sb.append(fixed(horaApertura, horaAperturaLentgh));
+        sb.append(fixed(estado, estadoLentgh));
+        sb.append(fixed(saldo, saldoLentgh));
         return sb.toString();
     }
 
-    private String buildTramaEliminar(String identificacion) {
+    private String buildTramaEliminar(String nroCta) {
         StringBuilder sb = new StringBuilder();
-        sb.append(fixed(identificacion, identificacionLength));
+        sb.append(fixed(nroCta, nroCtaLentgh));
         return sb.toString();
     }
 
@@ -184,7 +192,5 @@ public class ClientSoap {
             return value.substring(0, length);
         }
         return String.format("%-" + length + "s", value);
-    }
-
-
+    }    
 }

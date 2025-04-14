@@ -191,6 +191,7 @@ public class CuentaService {
         cuenta.setFechaApertura(fechaApertura);
         cuenta.setHoraApertura(horaApertura);
         cuenta.setEstado(estado);
+        //cuenta.setCta(estado);
         cuenta.setSaldo(saldo);
 
         String ultimoNumero = cuentaRepository.findTopByOrderByNumeroCuentaDesc() 
@@ -198,6 +199,7 @@ public class CuentaService {
             .orElse("0");
         long siguienteNumero = Long.parseLong(ultimoNumero) + 1;
         cuenta.setNumeroCuenta(String.valueOf(siguienteNumero));
+        cuenta.setCta(String.valueOf(siguienteNumero));
 
         return cuenta;
     }

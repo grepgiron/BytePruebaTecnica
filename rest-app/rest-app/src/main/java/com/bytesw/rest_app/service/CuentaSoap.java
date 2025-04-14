@@ -86,6 +86,7 @@ public class CuentaSoap {
 
             } catch (Exception e) {
                 e.printStackTrace();
+                logger.error(xml, e);
                 Map<String, String> error = new HashMap<>();
                 error.put("codigo", "999");
                 error.put("mensaje", "Error al consumir servicio SOAP: " + e.getMessage());
@@ -126,6 +127,7 @@ public class CuentaSoap {
 
             } catch (Exception e) {
                 e.printStackTrace();
+                logger.error(xml, e);
                 Map<String, String> error = new HashMap<>();
                 error.put("codigo", "999");
                 error.put("mensaje", "Error al consumir servicio SOAP: " + e.getMessage());
@@ -166,6 +168,7 @@ public class CuentaSoap {
 
             } catch (Exception e) {
                 e.printStackTrace();
+                logger.error(xml, e);
                 Map<String, String> error = new HashMap<>();
                 error.put("codigo", "999");
                 error.put("mensaje", "Error al consumir servicio SOAP: " + e.getMessage());

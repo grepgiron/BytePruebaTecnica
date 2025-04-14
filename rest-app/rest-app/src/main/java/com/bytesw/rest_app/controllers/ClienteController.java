@@ -47,7 +47,8 @@ public class ClienteController {
             return responseXml;
 
         }catch (Exception e){
-            System.out.println(e.getMessage());
+            //System.out.println(e.getMessage());
+            logger.error(request.toString(), e);
             return null;
         }
     }
@@ -69,7 +70,8 @@ public class ClienteController {
             return responseXml;
 
         }catch (Exception e){
-            System.out.println(e.getMessage());
+            //System.out.println(e.getMessage());
+            logger.error(request.toString(), e);
             return null;
         }
     }
@@ -86,7 +88,8 @@ public class ClienteController {
             return responseXml;
 
         }catch (Exception e){
-            System.out.println(e.getMessage());
+            //System.out.println(e.getMessage());
+            logger.error(request.toString(), e);
             return null;
         }
     }

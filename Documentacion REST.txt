@@ -1,0 +1,91 @@
+API REST - Documentación de Endpoints
+
+ClienteController (/api/clientes)
+
+| Método | Ruta                 | Descripción                                 | Parámetros / Body                                                                 |
+|--------|----------------------|---------------------------------------------|-----------------------------------------------------------------------------------|
+| POST   | /api/clientes      | Crear cliente                               | Body: nombre, identificacion, tipoIdentificacion, fechaNacimiento        |
+| PUT    | /api/clientes      | Actualizar cliente                          | Body: nombre, identificacion, tipoIdentificacion, fechaNacimiento        |
+| DELETE | /api/clientes      | Eliminar cliente                            | Body: identificacion                                                           |
+| GET    | /api/clientes/{id} | Obtener cliente por ID                      | Path: id                                                                       |
+| GET    | /api/clientes      | Obtener lista de clientes (paginado opcional)| Query: page, size                                                            |
+
+-Ejemplo estructura JSON para Endpoints
+Crear Cliente (POST /api/clientes)
+
+{
+  "nombre": "Mario González",
+  "identificacion": "01010119900523",
+  "tipoIdentificacion": "DNI",
+  "fechaNacimiento": "1990-05-23"
+}
+
+Actualizar Cliente (PUT /api/clientes)
+
+{
+  "nombre": "Mario Gonzáles Actualizado",
+  "identificacion": "01010119900523",
+  "tipoIdentificacion": "DNI",
+  "fechaNacimiento": "1990-05-23"
+}
+
+CuentaController (/api/cuentas)
+
+| Método | Ruta                               | Descripción                                  | Parámetros / Body                                                                 |
+|--------|------------------------------------|----------------------------------------------|-----------------------------------------------------------------------------------|
+| POST   | /api/cuentas                     | Crear cuenta                                 | Body: clienteId, fechaApertura, horaApertura, estado, saldo           |
+| PUT    | /api/cuentas                     | Actualizar cuenta                            | Body: nroCta, clienteId, fechaApertura, horaApertura, estado, saldo |
+| DELETE | /api/cuentas                     | Eliminar cuenta                              | Body: nroCta                                                                    |
+| GET    | /api/cuentas                     | Obtener todas las cuentas (paginado opcional)| Query: page, size                                                             |
+| GET    | /api/cuentas/{nroCta}            | Obtener cuenta con movimientos               | Path: nroCta                                                                    |
+| GET    | /api/cuentas/cliente/{clienteId} | Obtener cuentas por cliente                  | Path: clienteId, Query: page, size                                          |
+
+-Ejemplo estructura JSON para Endpoints
+Crear Cuenta (POST /api/cuentas)
+
+{
+  "clienteId": "100",
+  "fechaApertura": "2024-04-10",
+  "horaApertura": "10:45:00",
+  "estado": "ACTIVO",
+  "saldo": "2500.00"
+}
+
+Actualizar Cuenta (PUT /api/cuentas)
+
+{
+  "nroCta": "300000000026",
+  "clienteId": "101",
+  "fechaApertura": "2024-04-10",
+  "horaApertura": "11:30:00",
+  "estado": "INACTIVA",
+  "saldo": "0.00"
+}
+
+
+MovimientoController (/api/movimientos)
+
+| Método | Ruta                                 | Descripción                                | Parámetros / Body            |
+|--------|--------------------------------------|--------------------------------------------|------------------------------|
+| GET    | /api/movimientos                   | Obtener todos los movimientos              | Query: page, size        |
+| GET    | /api/movimientos/cuenta/{nroCta}   | Obtener movimientos de una cuenta          | Path: nroCta               |
+
+-Ejemplo estructura JSON para Endpoints
+Movimiento de Cuenta (POST /api/movimientos)
+
+{
+  "cuentaOrigen": "300000000023",
+  "cuentaDestino": "300000000034",
+  "fechaMovimiento": "2025-04-13",
+  "horaMovimiento": "14:45:00",
+  "tipoMovimiento": "T",
+  "monto": "500.00"
+}
+
+
+
+
+
+
+
+

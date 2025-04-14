@@ -30,8 +30,6 @@ public class Movimiento {
     @ResponsePayload
     public ProcesarMovimientoResponse procesarMovimiento(@RequestPayload ProcesarMovimientoRequest request) 
     {
-        System.out.println(request.getTrama());
-
         MovimientoData data = movimientoParser.parse(request.getTrama());
 
         String tramaRespuesta = movimientoService.procesarTrama(data);

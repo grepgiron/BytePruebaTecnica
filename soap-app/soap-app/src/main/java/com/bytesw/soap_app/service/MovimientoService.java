@@ -59,14 +59,14 @@ public class MovimientoService
             //Extraer y validar trama
             String cuentaOrigen = trama.cuentaOrigen;
             String cuentaDestino = trama.cuentaDestino;
-            LocalDate fechaStr = trama.fecha;
-            String horaStr = trama.hora;
+            LocalDate fechaStr = LocalDate.now();
+            String horaStr = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
             String tipo = trama.tipo;
             String montoStr = trama.monto;
 
             //Validar trama
             List<ValidacionError> errores = validarDatosMovimiento(
-                cuentaOrigen, cuentaDestino, fechaStr, horaStr, tipo, montoStr
+                cuentaOrigen, cuentaDestino, horaStr, tipo, montoStr
             );
 
             if (!errores.isEmpty()) 
@@ -168,7 +168,7 @@ public class MovimientoService
     }
 
     private List<ValidacionError> validarDatosMovimiento(String cuentaOrigen, String cuentaDestino,
-            LocalDate fechaStr, String horaStr, String tipo, String montoStr) 
+            String horaStr, String tipo, String montoStr) 
     {
         List<ValidacionError> errores = new ArrayList<>();
 
@@ -187,30 +187,6 @@ public class MovimientoService
         } else if (!cuentaRepository.existsByNumeroCuenta(cuentaDestino)) 
         {
             errores.add(new ValidacionError("999", "La cuenta destino no existe"));
-        }
-
-        //Validación de fecha
-        if (!fechaStr.isAfter(LocalDate.now())) 
-        {
-            errores.add(new ValidacionError("999", "Fecha fuera del dia actual"));
-        } else 
-        {
-            try 
-            {
-                    //LocalDate.parse(fechaStr, FECHA_FORMATTER);
-            } catch (Exception e) 
-            {
-                errores.add(new ValidacionError("999", "Fecha inválida"));
-            }
-        }
-
-        //Validación de hora
-        try 
-        {
-            LocalTime.parse(horaStr, DateTimeFormatter.ofPattern("HH:mm:ss"));
-        } catch (Exception e) 
-        {
-            errores.add(new ValidacionError("999", "Formato de hora inválido (debe ser HH:mm:ss)"));
         }
 
         //Validación de tipo

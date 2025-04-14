@@ -82,8 +82,18 @@ Movimiento de Cuenta (POST /api/movimientos)
   "monto": "500.00"
 }
 
+AuthController (/api/auth)
 
+| Método | Ruta                                 | Descripción                                | Parámetros / Body            |
+|--------|--------------------------------------|--------------------------------------------|------------------------------|
+| POST    | /api/auth/login                   | Autenticacion / Obtener Token                | Body: token        |
 
+-Ejemplo estructura JSON para Endpoints
+Autenticacion (POST /api/auth/login)
+{
+  "username": "admin",
+  "password": "admin123"
+}
 
 
 

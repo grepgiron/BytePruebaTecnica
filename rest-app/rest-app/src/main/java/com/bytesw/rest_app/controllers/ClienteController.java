@@ -32,7 +32,7 @@ public class ClienteController {
 
     @PostMapping
     public Map<String, String> crearCliente(@RequestBody Map<String, String> request) {
-        System.out.println("request: " + request);
+        //System.out.println("request: " + request);
         try
         {
             String nombre = request.get("nombre");

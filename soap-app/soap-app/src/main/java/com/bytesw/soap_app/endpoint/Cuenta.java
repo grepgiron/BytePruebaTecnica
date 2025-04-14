@@ -12,14 +12,19 @@ import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 
 import com.bytesw.soap_app.repository.ClienteRepository;
+import com.bytesw.soap_app.request.Cliente.ActualizarClienteResponse;
 import com.bytesw.soap_app.request.Cliente.EliminarClienteRequest;
 import com.bytesw.soap_app.request.Cliente.EliminarClienteResponse;
+import com.bytesw.soap_app.request.Cuenta.ActualizarCuentaRequest;
+import com.bytesw.soap_app.request.Cuenta.ActualizarCuentaResponse;
 import com.bytesw.soap_app.request.Cuenta.CrearCuentaRequest;
 import com.bytesw.soap_app.request.Cuenta.CrearCuentaResponse;
 import com.bytesw.soap_app.request.Cuenta.EliminarCuentaRequest;
 import com.bytesw.soap_app.request.Cuenta.EliminarCuentaResponse;
 import com.bytesw.soap_app.service.CuentaService;
+import com.bytesw.soap_app.utils.ClienteParser.ClienteData;
 import com.bytesw.soap_app.utils.CuentaParse;
+import com.bytesw.soap_app.utils.CuentaParserActualiza;
 import com.bytesw.soap_app.utils.CuentaParse.CuentaData;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -36,11 +41,13 @@ public class Cuenta {
 
     private final CuentaService cuentaService;
     private final CuentaParse cuentaParse;
+    private final CuentaParserActualiza cuentaParserActualiza;
 
-    public Cuenta(CuentaService cuentaService, CuentaParse cuentaParse) 
+    public Cuenta(CuentaService cuentaService, CuentaParse cuentaParse, CuentaParserActualiza cuentaParserActualiza) 
     {
         this.cuentaService = cuentaService;
         this.cuentaParse = cuentaParse;
+        this.cuentaParserActualiza = cuentaParserActualiza;
     }
 
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "crearCuentaRequest")
@@ -65,12 +72,33 @@ public class Cuenta {
         return response;
     }
 
+    @PayloadRoot(namespace = NAMESPACE_URI, localPart = "actualizarCuentaRequest")
+    @ResponsePayload
+    public ActualizarCuentaResponse actualizarCuenta(@RequestPayload ActualizarCuentaRequest request) {
+       
+        
+        CuentaParserActualiza.CuentaData datos = cuentaParserActualiza.parse(request.getTrama());
+        //String nroCta, Long clienteId, LocalDate fechaApertura, LocalTime horaApertura, String estado, BigDecimal saldo
+        String resultado = cuentaService.actualizarCuenta(
+                datos.nroCuenta,
+                datos.clienteId,
+                datos.fechaApertura,
+                datos.horaApertura,
+                datos.estado,
+                datos.saldo
+        );
+
+        ActualizarCuentaResponse response = new ActualizarCuentaResponse();
+        response.setTrama(resultado);
+        return response;
+
+    }
+
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "eliminarCuentaRequest")
     @ResponsePayload
     public EliminarCuentaResponse eliminarCuenta(@RequestPayload EliminarCuentaRequest request) {
        
         String resultado = cuentaService.eliminarCuenta(request.getTrama());
-
         EliminarCuentaResponse response = new EliminarCuentaResponse();
         response.setTrama(resultado);
         return response;

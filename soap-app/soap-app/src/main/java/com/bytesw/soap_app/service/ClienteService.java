@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.bytesw.soap_app.model.Cliente;
 import com.bytesw.soap_app.repository.ClienteRepository;
+import com.bytesw.soap_app.repository.CuentaRepository;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -14,6 +15,9 @@ import java.util.regex.Pattern;
 public class ClienteService {
     @Autowired
     private ClienteRepository clienteRepository;
+
+    @Autowired
+    private CuentaRepository cuentaRepository;
 
     private static final Pattern P_NOMBRE = Pattern.compile("^[A-Za-zÁÉÍÓÚáéíóúñÑ ]{2,50}$");
     private static final Pattern P_IDENTIFICACION = Pattern.compile("^\\d{13,14}$");
@@ -112,12 +116,25 @@ public class ClienteService {
 
     public String eliminarCliente(String identificacion) {
         try {
+            System.out.println(identificacion);
             Optional<Cliente> clienteOpt = clienteRepository.findByIdentificacion(identificacion);
+
+
+
             if (clienteOpt.isEmpty()) {
                 return String.format("%-3s%-100s%-16s", 
                     "999", 
                     "Cliente no encontrado", 
                     String.format("%-16s", ""));
+            }
+
+            boolean cuentasAsociadas = cuentaRepository.existsByClienteId(clienteOpt.get().getId());
+            //System.out.println(tieneCuentasActivas);
+            if (cuentasAsociadas) {
+                return String.format("%-3s%-100s%-16s",
+                        "999",
+                        "No se puede eliminar: el cliente tiene cuentas asociadas",
+                        "");
             }
 
             clienteRepository.delete(clienteOpt.get());

@@ -13,4 +13,6 @@ public interface CuentaRepository extends JpaRepository<Cuenta, String>
     Optional<Cuenta> findByNumeroCuenta(String numeroCuenta);
     Optional<Cuenta> findTopByOrderByNumeroCuentaDesc();
     boolean existsByNumeroCuenta(String numeroCuenta);
+    boolean existsByClienteIdAndEstado(Long clienteId, String estado);
+    boolean existsByClienteId(Long clienteId);
 }

@@ -46,7 +46,8 @@ public class CuentaSoap {
 
     private static final String SOAP_URI = "http://localhost:8081/ws";
 
-    private final WebServiceTemplate webServiceTemplate = new WebServiceTemplate();
+    @Autowired
+    private WebServiceTemplate webServiceTemplate;
     
     public Map<String, String> enviarCrearCuenta(String clienteId, String fechaApertura, String horaApertura, String estado, String saldo) {
         String trama = buildTrama(clienteId, fechaApertura, horaApertura, estado, saldo);
@@ -88,8 +89,8 @@ public class CuentaSoap {
             }
     }
 
-    public Map<String, String> enviarActualizarCuenta(String clienteId, String fechaApertura, String horaApertura, String estado, String saldo) {
-        String trama = buildTrama(clienteId, fechaApertura, horaApertura, estado, saldo);
+    public Map<String, String> enviarActualizarCuenta(String nroCta, String clienteId, String fechaApertura, String horaApertura, String estado, String saldo) {
+        String trama = buildTramaActualizar(nroCta, clienteId, fechaApertura, horaApertura, estado, saldo);
         String xml =
             // "<soapenv:Envelope xmlns:soapenv='http://schemas.xmlsoap.org/soap/envelope/' " +
             // "xmlns:cli='http://bytesw.com/soap/clientes'>" +
@@ -130,13 +131,12 @@ public class CuentaSoap {
 
     public Map<String, String> enviarEliminarCuenta(String nroCta) {
         String trama = buildTramaEliminar(nroCta.trim());
-        System.out.println(trama);
         String xml =
             // "<soapenv:Envelope xmlns:soapenv='http://schemas.xmlsoap.org/soap/envelope/' " +
             // "xmlns:cli='http://bytesw.com/soap/clientes'>" +
             // "<soapenv:Header/>" +
             // "<soapenv:Body>" +
-            "<cli:eliminarCuentaRequest xmlns:cli='http://bytesw.com/soap/clientes'>" +
+            "<cli:eliminarCuentaRequest xmlns:cli='http://bytesw.com/soap/cuentas'>" +
             "<trama>" + trama + "</trama>" +
             "</cli:eliminarCuentaRequest>" ;
             // "</soapenv:Body>" +
@@ -180,9 +180,22 @@ public class CuentaSoap {
         return sb.toString();
     }
 
-    private String buildTramaEliminar(String nroCta) {
+    private String buildTramaActualizar(String nroCta, String clienteId, String fechaApertura, String horaApertura, String estado, String saldo) {
+        System.out.println(nroCta);
+        String fechaFormateada = LocalDate.parse(fechaApertura).format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
         StringBuilder sb = new StringBuilder();
         sb.append(fixed(nroCta, nroCtaLentgh));
+        sb.append(fixed(clienteId, clienteIdLentgh));
+        sb.append(fixed(fechaFormateada, fechaAperturaLentgh));
+        sb.append(fixed(horaApertura, horaAperturaLentgh));
+        sb.append(fixed(estado, estadoLentgh));
+        sb.append(fixed(saldo, saldoLentgh));
+        return sb.toString();
+    }
+
+    private String buildTramaEliminar(String nroCta) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(fixed(nroCta.trim(), nroCtaLentgh));
         return sb.toString();
     }
 

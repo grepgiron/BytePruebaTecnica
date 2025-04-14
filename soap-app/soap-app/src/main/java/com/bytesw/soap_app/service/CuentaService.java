@@ -87,7 +87,6 @@ public class CuentaService {
         } catch (Exception e) 
         {
             e.printStackTrace();
-            //return "999|Error al crear la cuenta: " + e.getMessage();
             return String.format("%-3s%-100s%-16s", 
                     "999", 
                     "Error al crear la cuenta", 
@@ -95,9 +94,61 @@ public class CuentaService {
         }
     }
 
+    public String actualizarCuenta(String nroCta, Long clienteId, LocalDate fechaApertura, LocalTime horaApertura, String estado, BigDecimal saldo) {
+        try {
+            Optional<Cuenta> cuentaOpt = cuentaRepository.findByNumeroCuenta(nroCta);
+
+            if (cuentaOpt.isEmpty()) {
+                return String.format("%-3s%-100s%-16s", 
+                    "999", 
+                    "Cuenta no encontrada", 
+                    String.format("%-16s", ""));
+            }
+
+            Cuenta cuenta = cuentaOpt.get();
+
+            List<ValidacionError> errores = validarDatosCuentaExistente(clienteId, fechaApertura, horaApertura, estado, saldo);
+            if (!clienteRepository.existsById(clienteId)) {
+                return String.format("%-3s%-100s%-16s", 
+                    "999", 
+                    "Cliente no existe", 
+                    String.format("%-16s", nroCta));
+            }
+
+            if (!errores.isEmpty()) {
+                ValidacionError error = errores.get(0);
+                return String.format("%-3s%-100s%-16s", 
+                    error.getCodigo(), 
+                    error.getMensaje(), 
+                    String.format("%-16s", nroCta));
+            }
+
+            // Actualizar los datos de la cuenta
+            cuenta.setClienteId(clienteId);
+            cuenta.setFechaApertura(fechaApertura);
+            cuenta.setHoraApertura(horaApertura);
+            cuenta.setEstado(estado);
+            cuenta.setSaldo(saldo);
+
+            cuentaRepository.save(cuenta);
+
+            return String.format("%-3s%-100s%-16s", 
+                    "000", 
+                    "Cuenta actualizada exitosamente", 
+                    String.format("%-16s", nroCta));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return String.format("%-3s%-100s%-16s", 
+                    "999", 
+                    "Error al actualizar la cuenta", 
+                    String.format("%-16s", nroCta));
+        }
+    }
+    
+
     public String eliminarCuenta(String cuenta) {
         try {
-            Optional<Cuenta> cuentaOpt = cuentaRepository.findByNumeroCuenta(cuenta);
+            Optional<Cuenta> cuentaOpt = cuentaRepository.findByNumeroCuenta(cuenta.trim());
             if (cuentaOpt.isEmpty()) {
                 return String.format("%-3s%-100s%-16s", 
                     "999", 
@@ -202,6 +253,35 @@ public class CuentaService {
         cuenta.setCta(String.valueOf(siguienteNumero));
 
         return cuenta;
+    }
+
+    private List<ValidacionError> validarDatosCuentaExistente(Long clienteId, LocalDate fechaApertura, LocalTime horaApertura, String estado, BigDecimal saldo) 
+{
+        List<ValidacionError> errores = new ArrayList<>();
+
+        if (clienteId == null) {
+            errores.add(new ValidacionError("999", "El ID del cliente es requerido"));
+        }
+
+        if (fechaApertura == null) {
+            errores.add(new ValidacionError("999", "La fecha de apertura es requerida"));
+        }
+
+        if (horaApertura == null) {
+            errores.add(new ValidacionError("999", "La hora de apertura es requerida"));
+        }
+
+        if (estado == null || estado.isEmpty()) {
+            errores.add(new ValidacionError("999", "El estado es requerido"));
+        }
+
+        if (saldo == null) {
+            errores.add(new ValidacionError("999", "El saldo es requerido"));
+        } else if (saldo.compareTo(BigDecimal.ZERO) < 0) {
+            errores.add(new ValidacionError("999", "El saldo debe ser mayor o igual a cero"));
+        }
+
+        return errores;
     }
 }
 

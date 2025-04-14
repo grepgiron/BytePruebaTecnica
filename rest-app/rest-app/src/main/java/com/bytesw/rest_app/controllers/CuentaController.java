@@ -59,13 +59,14 @@ public class CuentaController {
         System.out.println("request: " + request);
         try
         {
+            String nroCta = request.get("nroCta");
             String clienteId = request.get("clienteId");
             String fechaApertura = request.get("fechaApertura");
             String horaApertura = request.get("horaApertura");
             String estado = request.get("estado");
             String saldo = request.get("saldo");
     
-            Map<String, String> responseXml = cuentaSoap.enviarActualizarCuenta(clienteId, fechaApertura, horaApertura, estado, saldo);
+            Map<String, String> responseXml = cuentaSoap.enviarActualizarCuenta(nroCta, clienteId, fechaApertura, horaApertura, estado, saldo);
     
             //Map<String, String> response = new HashMap<>();
             //response.put("soapResponse", responseXml);
@@ -92,9 +93,9 @@ public class CuentaController {
         System.out.println("request: " + request);
         try
         {
-            String identificacion = request.get("cuentaOrigen");
+            String cuenta = request.get("nroCta");
     
-            Map<String, String> responseXml = cuentaSoap.enviarEliminarCuenta(identificacion);
+            Map<String, String> responseXml = cuentaSoap.enviarEliminarCuenta(cuenta);
     
             return responseXml;
 

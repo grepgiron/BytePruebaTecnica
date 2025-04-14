@@ -14,6 +14,8 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.ws.client.core.WebServiceTemplate;
 import org.springframework.xml.transform.StringSource;
 
+import com.bytesw.rest_app.controllers.ClienteController;
 import com.bytesw.rest_app.utils.ParserResponse;
 
 @Component
@@ -45,6 +48,8 @@ public class CuentaSoap {
 
 
     private static final String SOAP_URI = "http://localhost:8081/ws";
+
+    private static final Logger logger = LoggerFactory.getLogger(CuentaSoap.class);
 
     @Autowired
     private WebServiceTemplate webServiceTemplate;

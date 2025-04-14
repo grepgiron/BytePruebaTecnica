@@ -1,11 +1,14 @@
 package com.bytesw.rest_app.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.ws.client.core.WebServiceTemplate;
 import org.springframework.xml.transform.StringSource;
 
+import com.bytesw.rest_app.controllers.ClienteController;
 import com.bytesw.rest_app.utils.ParserResponse;
 
 import java.io.ByteArrayOutputStream;
@@ -37,6 +40,8 @@ public class ClientSoap {
 
 
     private static final String SOAP_URI = "http://localhost:8081/ws";
+
+    private static final Logger logger = LoggerFactory.getLogger(ClientSoap.class);
 
     @Autowired
     private WebServiceTemplate webServiceTemplate;

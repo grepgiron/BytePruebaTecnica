@@ -1,6 +1,8 @@
 package com.bytesw.rest_app.controllers;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +29,9 @@ public class MovimientoController {
     @Autowired
     private MovimientosSoap movimientosSoap;
 
+
+    private static final Logger logger = LoggerFactory.getLogger(MovimientoController.class);
+
     @GetMapping
     public List<Movimiento> getMovimientos(@RequestParam(required = false) Integer page,
                                            @RequestParam(required = false) Integer size) {
@@ -38,7 +43,7 @@ public class MovimientoController {
     }
 
     @PostMapping
-    public Map<String, String> crearCuenta(@RequestBody Map<String, String> request) {
+    public Map<String, String> crearMovimiento(@RequestBody Map<String, String> request) {
         System.out.println("request: " + request);
         try
         {

@@ -1,6 +1,8 @@
 package com.bytesw.rest_app.controllers;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +27,8 @@ public class ClienteController {
 
     @Autowired
     private ClientSoap soapClient;
+
+    private static final Logger logger = LoggerFactory.getLogger(ClienteController.class);
 
     @PostMapping
     public Map<String, String> crearCliente(@RequestBody Map<String, String> request) {
